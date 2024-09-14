@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        #container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #signin, #createnew {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input {
+            margin: 5px;
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            width: 220px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        #signin-info {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="signin">
+            <h1>Login</h1>
+            <input id="username" placeholder="Username">
+            <input id="password" type="password" placeholder="Password">
+            <input id="name" placeholder="Name (Optional)">
+            <button onclick="done()">Login</button>
+            <p id="signin-info"></p> <!-- Added for login status display -->
+        </div>
+
+        <div id="createnew">
+            <h1>Create New User</h1>
+            <input id="cusername" placeholder="Username">
+            <input id="cpassword" type="password" placeholder="Password">
+            <input id="cname" placeholder="Name">
+            <button onclick="create()">Create</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize default data if 'ussr' is not present in localStorage
+        if (!localStorage.getItem('ussr')) {
+            let defaultData = {
+                "john": ["user1", "pass1"] // Example user: name is 'john', username is 'user1', password is 'pass1'
+            };
+            localStorage.setItem('ussr', JSON.stringify(defaultData));
+        }
+
+        // Retrieve and parse the 'ussr' object from localStorage
+        let newussr = localStorage.getItem('ussr');
+        let ussr = newussr ? JSON.parse(newussr) : {}; // Parse or default to empty object
+
+        function get(id) {
+            return document.getElementById(id).value.trim();
+        }
+
+        function done() {
+            var username = get("username");
+            var password = get("password");
+            var name = get("name");
+
+            if (ussr[name] && username === ussr[name][0] && password === ussr[name][1]) {
+                alert("Login successful");
+
+                // Store the logged-in user's username in localStorage
+                localStorage.setItem('loggedInUser', username);
+
+                // Establish WebSocket connection
+                var ws = new WebSocket("ws://localhost:8080"); // Replace with your WebSocket server address
+                ws.onopen = () => {
+                    console.log('WebSocket connection established');
+                    ws.send(username);
+                };
+                ws.onmessage = (event) => {
+                    console.log('Message from server:', event.data);
+                };
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+                ws.onclose = () => {
+                    console.log('WebSocket connection closed');
+                };
+
+                // Clear input fields
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('name').value = '';
+
+                // Update sign-in info
+                document.getElementById('signin-info').innerText = `Logged in as: ${username}`;
+            } else {
+                alert("Login failed. Please check your credentials.");
+            }
+        }
+
+        function create() {
+            var cuser = get('cusername');
+            var cpass = get('cpassword');
+            var cname = get('cname');
+
+            if (!cuser || !cpass || !cname) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            // Check if the username is already taken
+            if (Object.values(ussr).some(user => user[0] === cuser)) {
+                alert("Username is already taken. Please choose another one.");
+                return;
+            }
+
+            // Add new user to the ussr object
+            ussr[cname] = [cuser, cpass];
+
+            // Save the updated ussr object back to localStorage
+            localStorage.setItem('ussr', JSON.stringify(ussr));
+
+            alert("User created successfully!");
+
+            // Clear input fields
+            document.getElementById('cusername').value = '';
+            document.getElementById('cpassword').value = '';
+            document.getElementById('cname').value = '';
+        }
+
+        // Debugging: Check localStorage for loggedInUser
+        console.log("Checking localStorage for loggedInUser...");
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        console.log("Retrieved loggedInUser:", loggedInUser);
+
+        if (loggedInUser) {
+            document.getElementById('signin-info').innerText = `Logged in as: ${loggedInUser}`;
+        } else {
+            document.getElementById('signin-info').innerText = "You are not logged in.";
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

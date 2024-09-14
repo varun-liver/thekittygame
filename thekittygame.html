@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .hi1 {
+            font-size: xx-small;
+            position: relative;
+        }
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        nav {
+            background-color: gray;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+        }
+        button:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 30px;
+        }
+        h1 {
+            font-size: 36px;
+        }
+        h2 {
+            font-size: 36px;
+        }
+        p {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+            font-size: 18px;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+        footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            background-color: #333;
+            color: white;
+        }
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        #signin {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border: 1px solid black;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        #signin button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src='pixil-frame-0(1).png' alt="Game Logo" class="logo">
+        <div class="button-container">
+            <a href="index.html"><button type="button">Home</button></a>
+            <a href="downloads.html"><button type="button">Downloads</button></a>
+            <button type="button">About</button>
+            <button type="button">Contact</button>
+        </div>
+    </nav>
+
+    <h1>The Kitty Game</h1>
+    
+    <p>
+        Embark on an unforgettable journey in <strong>The Kitty Game</strong>, where you explore vast worlds, battle fierce enemies, and unravel ancient mysteries. Whether you’re solving puzzles or engaging in epic battles, every moment is packed with excitement and discovery.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li><strong>Expansive Open World:</strong> Discover vast landscapes filled with hidden secrets.</li>
+        <li><strong>Challenging Puzzles:</strong> Test your wits with a variety of mind-bending puzzles.</li>
+        <li><strong>Epic Combat:</strong> Face off against formidable foes with a range of weapons and abilities.</li>
+        <li><strong>Rich Storyline:</strong> Immerse yourself in a deep, engaging narrative.</li>
+        <li><strong>Stunning Graphics:</strong> Experience breathtaking visuals that bring the world to life.</li>
+    </ul>
+
+    <h2>About the Game</h2>
+    <p>
+        <strong>The Kitty Game</strong> is the latest title from <em>Sus Games</em>, a passionate team of developers dedicated to creating immersive and innovative gaming experiences. With a focus on player-driven stories and dynamic gameplay, we aim to push the boundaries of what’s possible in the world of video games.
+    </p>
+
+    <h2>Contact Us</h2>
+    <p>
+        Have questions or need support? Reach out to us at <a href="mailto:varunsureshkumar2015@gmail.com">varunsureshkumar2015@gmail.com</a> or follow us on social media to stay up to date with the latest news and updates.
+    </p>
+    <p id="username"></p>
+
+    <div id="signin">
+        <button onclick="signin()">Sign In</button>
+        <button onclick="dismiss()">Dismiss</button>
+    </div>
+
+    <script>
+        function signin(){
+            window.location.href = "signin.html"; // Adjust path for deployment
+        }
+
+        function dismiss(){
+            document.getElementById('signin').remove(); // Remove the sign-in div when dismissed
+        }
+
+        // WebSocket connection setup
+        var ws = new WebSocket("ws://localhost:8080");
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+        ws.onmessage = event => {
+            console.log('Message from server:', event.data);
+        };
+        ws.onerror = error => {
+            console.error('WebSocket error:', error);
+        };
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+    </script>
+    
+    <footer>
+        <p class="hi">&copy; 2024 Sus Games. All rights reserved.</p>
+        <p class="hi1" style="text-align: center;">Follow us on 
+            <a href="#">Home</a>, 
+            <a href="#">Downloads</a>, and 
+            <a href="#">Help</a>.
+        </p>
+    </footer>
+</body>
+</html>
+
+
+
+
