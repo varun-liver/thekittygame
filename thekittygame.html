@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kitty Game</title>
     <style>
         .hi1 {
             font-size: xx-small;
@@ -35,12 +38,10 @@
             color: white;
             border: none;
             cursor: pointer;
-            flex: 1;
             min-width: 120px;
         }
         button:hover {
             background-color: #0056b3;
-            color: white;
         }
         h1, h2 {
             text-align: center;
@@ -74,6 +75,7 @@
             padding: 20px 0;
             background-color: #333;
             color: white;
+            text-align: center;
         }
         footer a {
             color: #007bff;
@@ -82,7 +84,6 @@
         footer a:hover {
             text-decoration: underline;
         }
-
         #signin {
             position: fixed;
             bottom: 20px;
@@ -103,8 +104,8 @@
         <div class="button-container">
             <a href="index.html"><button type="button">Home</button></a>
             <a href="downloads.html"><button type="button">Downloads</button></a>
-            <button type="button">About</button>
-            <button type="button">Contact</button>
+            <a href="#"><button type="button">About</button></a>
+            <a href="#"><button type="button">Contact</button></a>
         </div>
     </nav>
 
@@ -132,30 +133,37 @@
     <p>
         Have questions or need support? Reach out to us at <a href="mailto:varunsureshkumar2015@gmail.com">varunsureshkumar2015@gmail.com</a> or follow us on social media to stay up to date with the latest news and updates.
     </p>
-    <p id="username"></p>
-
+    
     <div id="signin">
         <button onclick="signin()">Sign In</button>
         <button onclick="dismiss()">Dismiss</button>
     </div>
 
+    <script src="script.js"></script>
+
     <script>
-        import username from thekittygamesignin.html
-        function signin(){
-            window.location.href = "signin.html"; // Adjust path for deployment
+        // Check if the username variable is defined
+        if (typeof username !== 'undefined') {
+            alert(username);
+        } else {
+            console.warn('username is not defined. Ensure it is set properly in donotopen.js');
         }
 
-        function dismiss(){
-            document.getElementById('signin').remove(); // Remove the sign-in div when dismissed
+        function signin() {
+            window.location.href = "signin.html"; // Redirect to sign-in page
         }
 
-        // WebSocket connection setup
-        import username from thekittygamesignin.html
+        function dismiss() {
+            document.getElementById('signin').remove(); // Remove the sign-in prompt
+        }
+
+        // WebSocket connection setup (Optional: Example of WebSocket usage)
+        
     </script>
     
     <footer>
         <p class="hi">&copy; 2024 Sus Games. All rights reserved.</p>
-        <p class="hi1" style="text-align: center;">Follow us on 
+        <p class="hi1">Follow us on 
             <a href="#">Home</a>, 
             <a href="#">Downloads</a>, and 
             <a href="#">Help</a>.
@@ -163,7 +171,4 @@
     </footer>
 </body>
 </html>
-
-
-
 

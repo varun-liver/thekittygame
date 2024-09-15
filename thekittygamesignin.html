@@ -69,7 +69,7 @@
             <input id="password" type="password" placeholder="Password">
             <input id="name" placeholder="Name (Optional)">
             <button onclick="done()">Login</button>
-            <p id="signin-info"></p> <!-- Added for login status display -->
+            <p id="signin-info"></p>
         </div>
 
         <div id="createnew">
@@ -107,10 +107,35 @@
                 alert("Login successful");
 
                 // Store the logged-in user's username in localStorage
+                localStorage.setItem('loggedInUser', username);
 
+                // Create the JavaScript content with the username
+                const jsContent = `
+                    var username = '${username}';
+                    console.log('Username:', username);
 
-                // Establish WebSocket connection
-                
+                    
+                `;
+
+                // Create a Blob with the JavaScript content
+                const blob = new Blob([jsContent], { type: 'text/javascript' });
+
+                // Create a URL for the Blob
+                const url = URL.createObjectURL(blob);
+
+                // Create an invisible anchor element
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'script.js';  // Name the file 'script.js'
+
+                // Append the anchor to the body (necessary for Firefox)
+                document.body.appendChild(a);
+
+                // Programmatically click the anchor to trigger the download
+                a.click();
+
+                // Remove the anchor from the document
+                document.body.removeChild(a);
 
                 // Clear input fields
                 document.getElementById('username').value = '';
@@ -154,22 +179,13 @@
             document.getElementById('cname').value = '';
         }
 
-        // Debugging: Check localStorage for loggedInUser
-        console.log("Checking localStorage for loggedInUser...");
+        // Check localStorage for loggedInUser and update sign-in info
         const loggedInUser = localStorage.getItem('loggedInUser');
-        console.log("Retrieved loggedInUser:", loggedInUser);
-
         if (loggedInUser) {
             document.getElementById('signin-info').innerText = `Logged in as: ${loggedInUser}`;
         } else {
             document.getElementById('signin-info').innerText = "You are not logged in.";
         }
-        export var username = username;
     </script>
 </body>
 </html>
-
-
-
-
-
