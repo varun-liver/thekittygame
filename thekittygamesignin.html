@@ -107,23 +107,11 @@
                 alert("Login successful");
 
                 // Store the logged-in user's username in localStorage
-                localStorage.setItem('loggedInUser', username);
+                document.cookie = `username=${username}; path=/thekittygame`;
+
 
                 // Establish WebSocket connection
-                var ws = new WebSocket("ws://localhost:8080"); // Replace with your WebSocket server address
-                ws.onopen = () => {
-                    console.log('WebSocket connection established');
-                    ws.send(username);
-                };
-                ws.onmessage = (event) => {
-                    console.log('Message from server:', event.data);
-                };
-                ws.onerror = (error) => {
-                    console.error('WebSocket error:', error);
-                };
-                ws.onclose = () => {
-                    console.log('WebSocket connection closed');
-                };
+                
 
                 // Clear input fields
                 document.getElementById('username').value = '';

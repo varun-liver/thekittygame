@@ -149,19 +149,7 @@
         }
 
         // WebSocket connection setup
-        var ws = new WebSocket("ws://localhost:8080");
-        ws.onopen = () => {
-            console.log('WebSocket connection established');
-        };
-        ws.onmessage = event => {
-            console.log('Message from server:', event.data);
-        };
-        ws.onerror = error => {
-            console.error('WebSocket error:', error);
-        };
-        ws.onclose = () => {
-            console.log('WebSocket connection closed');
-        };
+        alert(document.cookie)
     </script>
     
     <footer>
