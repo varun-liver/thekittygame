@@ -107,7 +107,6 @@
                 alert("Login successful");
 
                 // Store the logged-in user's username in localStorage
-                document.cookie = `username=${username}; path=/thekittygame`;
 
 
                 // Establish WebSocket connection
@@ -165,6 +164,7 @@
         } else {
             document.getElementById('signin-info').innerText = "You are not logged in.";
         }
+        export var username = username;
     </script>
 </body>
 </html>
