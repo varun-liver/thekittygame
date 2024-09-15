@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #createchar {
+            display: block;
+            height: 30px;
+            width: 150px;
+            border-radius: 5px;
+            border: 1px solid red;
+            background-color: lightgray;
+            margin-top: 20px;
+            position: absolute;
+            z-index: 10;
+            top: 20px;
+            left: 20px;
+        }
+
+        #createob {
+            display: block;
+            height: 30px;
+            width: 150px;
+            border-radius: 5px;
+            border: 1px solid green;
+            background-color: lightgray;
+            margin-top: 20px;
+            position: absolute;
+            z-index: 10;
+            top: 60px;
+            left: 20px;
+        }
+
+        .character-container {
+            width: 100px;
+            height: 100px;
+            display: block;
+            position: absolute;
+            overflow: hidden; /* Ensure the image doesn't overflow */
+            background-color: white; /* Default background color */
+        }
+
+        .character {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .button {
+            display: block;
+            height: 30px;
+            width: 150px;
+            border-radius: 5px;
+            border: 1px solid blue;
+            background-color: lightgray;
+            margin-top: 20px;
+            position: absolute;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <button id="createchar" onclick="createCharacter()">Create Character</button>
+    <button id="createob" onclick="createob()">Create Object</button>
+    <input type="color" id="changeobcolor" value="#ffffff"> <!-- Default color value -->
+
+    <!-- Hidden file input for selecting a new image -->
+    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="changeCharacterImage()">
+    
+    <!-- Container for the character image -->
+    <div id="characterContainer" class="character-container" style="display: none;">
+        <img id="characterImage" src="" alt="Character Image" class="character" onclick="document.getElementById('fileInput').click();">
+    </div>
+
+    <script>
+        var characterCreated = false;
+
+        document.onkeydown = function(event) {
+            var charimg = document.getElementById('charimg');
+            if (!charimg) return; // Exit if the character image does not exist
+
+            // Calculate new position
+            var left = (parseInt(charimg.style.left) || 0);
+            var top = (parseInt(charimg.style.top) || 0);
+
+            switch (event.keyCode) {
+                case 37: // Left arrow key
+                    charimg.style.left = (left - 10) + 'px';
+                    break;
+                case 38: // Up arrow key
+                    charimg.style.top = (top - 10) + 'px';
+                    break;
+                case 39: // Right arrow key
+                    charimg.style.left = (left + 10) + 'px';
+                    break;
+                case 40: // Down arrow key
+                    charimg.style.top = (top + 10) + 'px';
+                    break;
+            }
+        };
+
+        function createob() {
+            var ob = document.createElement('img');
+            ob.src = 'white.png'; // Ensure this is a valid path to an image
+            
+            // Create a container for the object with a background color
+            var obContainer = document.createElement('div');
+            obContainer.style.width = '100px';
+            obContainer.style.height = '100px';
+            obContainer.style.position = 'absolute'; // Position it absolutely
+            
+            // Set the background color to the selected value
+            var color = document.getElementById('changeobcolor').value || '#FFFFFF';
+            console.log("Selected color:", color); // Debugging line to check color value
+            obContainer.style.backgroundColor = color;
+
+            obContainer.appendChild(ob);
+
+            // Append the container to the body or a specific container
+            document.body.appendChild(obContainer);
+        }
+
+        // Function to create the character image
+        function createCharacter() {
+            if (!characterCreated) {
+                var characterImage = document.getElementById('characterImage');
+                var characterContainer = document.getElementById('characterContainer');
+
+                // Set an initial image
+                characterImage.src = "sus.png"; // Ensure this path is correct
+                characterContainer.style.display = 'block'; // Make the container visible
+                characterContainer.style.top = '100px'; // Initial position
+                characterContainer.style.left = '100px'; // Initial position
+                characterImage.id = 'charimg';
+
+                // Create buttons to change and delete the character
+                getcharmen();
+
+                // Set flag that character has been created
+                characterCreated = true;
+            }
+        }
+
+        function getcharmen() {
+            var getimg = document.createElement('button');
+            getimg.id = 'getimg';
+            getimg.innerText = 'Change Image';
+            getimg.className = 'button'; // Apply button styling
+            getimg.onclick = function() {
+                document.getElementById('fileInput').click();
+            };
+
+            var delchar = document.createElement('button');
+            delchar.id = 'deletechar';
+            delchar.innerText = 'Delete Character';
+            delchar.className = 'button'; // Apply button styling
+            delchar.onclick = function() {
+                var charimg = document.getElementById('charimg');
+                if (charimg) {
+                    charimg.parentElement.style.display = 'none'; // Hide the container
+                    characterCreated = false;
+                }
+                document.getElementById('getimg').remove();
+                delchar.remove();
+                characterCreated = false; // Reset flag
+            };
+
+            // Append buttons to body, ensure they don't move with character image
+            document.body.appendChild(getimg);
+            document.body.appendChild(delchar);
+        }
+
+        // Function to handle image change when a new file is selected
+        function changeCharacterImage() {
+            var characterImage = document.getElementById('charimg');
+            if (!characterImage) {
+                console.error("Character image element not found");
+                return;
+            }
+            
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0]; // Get the selected file
+
+            // Ensure a file is selected and it's an image
+            if (file && file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // Change the image src to the selected file
+                    characterImage.src = e.target.result; // Set the new image as src
+                };
+                reader.readAsDataURL(file); // Read the file as a Data URL
+            } else {
+                alert("Please select a valid image file.");
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
