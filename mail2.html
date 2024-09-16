@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -123,3 +124,130 @@
     </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Save to File Example</title>
+    <link rel="icon" type="image/x-icon" href="mailfav.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        .plan {
+            outline: 5px solid black;
+            float: left;
+            padding: 10px;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="data">
+        <input type="text" id="to" placeholder="To">
+        <input type="text" id="from" placeholder="From">
+        <input type="text" id="text" placeholder="Text">
+        <button type="button" id="done" onclick="done()">Done</button>
+    </div>
+    <div id="hello">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button type="button" id="logd" onclick="check()">Login</button>
+    </div>
+    <div id="plan-selection" style="display: none;">
+        <div class="plan premium-plan" style="display:none;">
+            <h1>Premium</h1>
+            <ul>
+                <li>$5</li>
+                <li>10+ mails per month</li>
+            </ul>
+            <button type="button" onclick="premium()">Choose</button>
+        </div>
+        <div class="plan unlimited-plan" style="display:none;">
+            <h1>Unlimited</h1>
+            <ul>
+                <li>$10</li>
+                <li>Unlimited mails</li>
+            </ul>
+            <button type="button" onclick="unlimited()">Choose</button>
+        </div>
+    </div>
+    
+    <script>
+        var signedinuser = null;
+        var ws = new WebSocket("ws://localhost:8080");
+        // Initialize usernames and ranks if not present
+        if (localStorage.getItem('usernames') === null) {
+            let usernames = {
+                "user1": "pass1"
+            };
+            localStorage.setItem('usernames', JSON.stringify(usernames));
+        }
+        
+        if (localStorage.getItem('ranks') === null) {
+            let ranks = {
+                "user1": "unlimited"
+            };
+            localStorage.setItem('ranks', JSON.stringify(ranks));
+        }
+
+        // Fetch usernames and ranks from localStorage
+        let usernames = JSON.parse(localStorage.getItem('usernames'));
+        let ranks = JSON.parse(localStorage.getItem('ranks'));
+
+        // Login check
+        function check() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            if (usernames[username] && usernames[username] === password) {
+                alert('Logged in as: ' + username);
+                signedinuser = username;
+                ws.send(username)
+            } else {
+                alert('Invalid username or password.');
+            }
+        }
+
+        // Done button action
+        function done() {
+            if (signedinuser === null) {
+                alert("Please log in first.");
+                return;
+            }
+
+            // Hide the input fields and buttons
+            $('#data').fadeOut();
+            $('#hello').fadeOut();
+            
+            // Fetch the user's rank and display the appropriate plan
+            let userRank = ranks[signedinuser];
+
+            // Show plans based on rank
+            if (userRank === 'premium') {
+                $('.premium-plan').fadeIn();
+                $('.unlimited-plan').fadeIn();
+            } else if (userRank === 'unlimited') {
+                $('.unlimited-plan').fadeIn();
+                $('.premium-plan').fadeIn();
+            }
+
+            // Display the plan selection section
+            $('#plan-selection').fadeIn();
+
+            // Optionally log the form data
+            var to = document.getElementById('to').value;
+            var from = document.getElementById('from').value;
+            var text = document.getElementById('text').value;
+            console.log("To: " + to + ", From: " + from + ", Text: " + text);
+        }
+
+        function premium() {
+            console.log("Premium plan chosen");
+        }
+
+        function unlimited() {
+            console.log("Unlimited plan chosen");
+        }
+    </script>
+</body>
+</html>
+>>>>>>> 6e542ac6a30e1747ec0a3237b03d39c42fa142ac
