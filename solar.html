@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planets in Circular Orbit</title>
+    <style>
+        #centerElement {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background-color: yellow;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .circleElement {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-size: cover;
+            border-radius: 50%;
+        }
+
+        #element1 {
+            background-image: url('mercury.png');
+        }
+        #element2 {
+            background-image: url('venus.png');
+        }
+        #element3 {
+            background-image: url('earth.png');
+        }
+        #element4 {
+            background-image: url('mars.png');
+        }
+    </style>
+</head>
+<body>
+    <div id="centerElement"></div>
+
+    <!-- Planet elements that will orbit around the center -->
+    <div class="circleElement" id="element1"></div>
+    <div class="circleElement" id="element2"></div>
+    <div class="circleElement" id="element3"></div>
+    <div class="circleElement" id="element4"></div>
+
+    <script>
+        // Get the center position (x, y) of the central element (Sun)
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        // Function to set an element's position based on its angle and distance from the center
+        function setPositionAtDegree(element, degree, centerX, centerY, radius) {
+            const radians = degree * (Math.PI / 180);  // Convert degree to radians
+            const x = centerX + radius * Math.cos(radians) - element.offsetWidth / 2;
+            const y = centerY + radius * Math.sin(radians) - element.offsetHeight / 2;
+            
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+        }
+
+        // Get the current day of the year
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay); // Calculate current day of the year
+
+        // Orbital periods for planets (in Earth days)
+        const mercuryOrbit = 88;
+        const venusOrbit = 225;
+        const earthOrbit = 365;
+        const marsOrbit = 687;
+
+        // Calculate the current angle based on the day of the year and orbital period
+        const mercuryAngle = (dayOfYear / mercuryOrbit) * 360;
+        const venusAngle = (dayOfYear / venusOrbit) * 360;
+        const earthAngle = (dayOfYear / earthOrbit) * 360;
+        const marsAngle = (dayOfYear / marsOrbit) * 360;
+
+        // Position planets at different distances from the Sun
+        setPositionAtDegree(document.getElementById('element1'), mercuryAngle, centerX, centerY, 50);  // Mercury, 50px radius
+        setPositionAtDegree(document.getElementById('element2'), venusAngle, centerX, centerY, 100);   // Venus, 100px radius
+        setPositionAtDegree(document.getElementById('element3'), earthAngle, centerX, centerY, 150);   // Earth, 150px radius
+        setPositionAtDegree(document.getElementById('element4'), marsAngle, centerX, centerY, 200);    // Mars, 200px radius
+    </script>
+</body>
+</html>
