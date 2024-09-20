@@ -23,178 +23,224 @@
             border-radius: 5px;
             border: 1px solid green;
             background-color: lightgray;
-            margin-top: 20px;
             position: absolute;
             z-index: 10;
             top: 60px;
             left: 20px;
         }
 
-        .character-container {
+        #charimg {
+            position: absolute;
             width: 100px;
             height: 100px;
-            display: block;
-            position: absolute;
-            overflow: hidden; /* Ensure the image doesn't overflow */
-            background-color: white; /* Default background color */
+            top: 0px;
+            left: 50px;
         }
 
-        .character {
+        #ob {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            background-color: yellow;
+        }
+
+        #ground {
+            position: absolute;
+            height: 20px;
             width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .button {
-            display: block;
-            height: 30px;
-            width: 150px;
-            border-radius: 5px;
-            border: 1px solid blue;
-            background-color: lightgray;
-            margin-top: 20px;
-            position: absolute;
-            z-index: 10;
+            background-color: green;
+            bottom: 0;
         }
     </style>
 </head>
 <body>
     <button id="createchar" onclick="createCharacter()">Create Character</button>
-    <button id="createob" onclick="createob()">Create Object</button>
-    <input type="color" id="changeobcolor" value="#ffffff"> <!-- Default color value -->
-
-    <!-- Hidden file input for selecting a new image -->
-    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="changeCharacterImage()">
-    
-    <!-- Container for the character image -->
-    <div id="characterContainer" class="character-container" style="display: none;">
-        <img id="characterImage" src="" alt="Character Image" class="character" onclick="document.getElementById('fileInput').click();">
-    </div>
+    <button id="createob" onclick="createObject()">Create Object</button>
+    <input type="color" id="changeobcolor" value="#ffffff">
+    <input type="file" accept="image/*" id="fileInput">
+    <img id="charimg" src="" alt="Character Image" style="display: none;">
+    <div id="ground"></div>
 
     <script>
         var characterCreated = false;
+        var gravity = 0.5;  // Gravity force
+        var velocity = 0;   // Vertical speed
+        var jumpForce = -10; // Jumping force
+        var isOnGround = false; // Check if character is on the ground
+        var selectedObject = null; // Variable to store the selected object
+        var objectCreated = false; // Track if an object is created
 
+        // Move the character image with arrow keys
         document.onkeydown = function(event) {
             var charimg = document.getElementById('charimg');
-            if (!charimg) return; // Exit if the character image does not exist
+            var object = document.getElementById('ob');
 
-            // Calculate new position
+            if (!charimg || charimg.style.display === 'none') return;
+
             var left = (parseInt(charimg.style.left) || 0);
             var top = (parseInt(charimg.style.top) || 0);
 
             switch (event.keyCode) {
                 case 37: // Left arrow key
-                    charimg.style.left = (left - 10) + 'px';
-                    break;
-                case 38: // Up arrow key
-                    charimg.style.top = (top - 10) + 'px';
+                    left -= 10;
+                    if (!checkHorizontalCollision(charimg, object)) {
+                        charimg.style.left = left + 'px';
+                    }
                     break;
                 case 39: // Right arrow key
-                    charimg.style.left = (left + 10) + 'px';
+                    left += 10;
+                    if (!checkHorizontalCollision(charimg, object)) {
+                        charimg.style.left = left + 'px';
+                    }
                     break;
-                case 40: // Down arrow key
-                    charimg.style.top = (top + 10) + 'px';
+                case 38: // Up arrow key (Jump)
+                    if (isOnGround) {
+                        velocity = jumpForce;  // Apply jump force
+                        isOnGround = false;    // Character is in the air
+                    }
                     break;
+            }
+
+            // Check for collision if the object exists
+            if (objectCreated && checkVerticalCollision(charimg, object)) {
+                charimg.style.top = (parseInt(object.style.top) - charimg.offsetHeight) + 'px'; // Adjust position on top of the object
+                velocity = 0; // Stop vertical movement when landing on an object
+                isOnGround = true;
             }
         };
 
-        function createob() {
-            var ob = document.createElement('img');
-            ob.src = 'white.png'; // Ensure this is a valid path to an image
-            
-            // Create a container for the object with a background color
-            var obContainer = document.createElement('div');
-            obContainer.style.width = '100px';
-            obContainer.style.height = '100px';
-            obContainer.style.position = 'absolute'; // Position it absolutely
-            
-            // Set the background color to the selected value
-            var color = document.getElementById('changeobcolor').value || '#FFFFFF';
-            console.log("Selected color:", color); // Debugging line to check color value
-            obContainer.style.backgroundColor = color;
-
-            obContainer.appendChild(ob);
-
-            // Append the container to the body or a specific container
-            document.body.appendChild(obContainer);
-        }
-
-        // Function to create the character image
+        // Function to create the character
         function createCharacter() {
             if (!characterCreated) {
-                var characterImage = document.getElementById('characterImage');
-                var characterContainer = document.getElementById('characterContainer');
-
-                // Set an initial image
-                characterImage.src = "sus.png"; // Ensure this path is correct
-                characterContainer.style.display = 'block'; // Make the container visible
-                characterContainer.style.top = '100px'; // Initial position
-                characterContainer.style.left = '100px'; // Initial position
-                characterImage.id = 'charimg';
-
-                // Create buttons to change and delete the character
-                getcharmen();
-
-                // Set flag that character has been created
-                characterCreated = true;
-            }
-        }
-
-        function getcharmen() {
-            var getimg = document.createElement('button');
-            getimg.id = 'getimg';
-            getimg.innerText = 'Change Image';
-            getimg.className = 'button'; // Apply button styling
-            getimg.onclick = function() {
-                document.getElementById('fileInput').click();
-            };
-
-            var delchar = document.createElement('button');
-            delchar.id = 'deletechar';
-            delchar.innerText = 'Delete Character';
-            delchar.className = 'button'; // Apply button styling
-            delchar.onclick = function() {
+                var fileInput = document.getElementById('fileInput');
                 var charimg = document.getElementById('charimg');
-                if (charimg) {
-                    charimg.parentElement.style.display = 'none'; // Hide the container
-                    characterCreated = false;
-                }
-                document.getElementById('getimg').remove();
-                delchar.remove();
-                characterCreated = false; // Reset flag
-            };
 
-            // Append buttons to body, ensure they don't move with character image
-            document.body.appendChild(getimg);
-            document.body.appendChild(delchar);
+                if (fileInput.files && fileInput.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        charimg.src = e.target.result;
+                        charimg.style.display = 'block'; // Show the image
+                        charimg.style.left = '50px'; // Initial position
+                        charimg.style.top = '0px';
+                        applyGravity(); // Start applying gravity after creation
+                    };
+
+                    reader.readAsDataURL(fileInput.files[0]);
+                    characterCreated = true;
+                } else {
+                    alert("Please select an image file.");
+                }
+            }
         }
 
-        // Function to handle image change when a new file is selected
-        function changeCharacterImage() {
-            var characterImage = document.getElementById('charimg');
-            if (!characterImage) {
-                console.error("Character image element not found");
-                return;
-            }
-            
-            var fileInput = document.getElementById('fileInput');
-            var file = fileInput.files[0]; // Get the selected file
+        // Apply gravity using animation
+        function applyGravity() {
+            var charimg = document.getElementById('charimg');
+            var ground = document.getElementById('ground');
 
-            // Ensure a file is selected and it's an image
-            if (file && file.type.startsWith('image/')) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    // Change the image src to the selected file
-                    characterImage.src = e.target.result; // Set the new image as src
-                };
-                reader.readAsDataURL(file); // Read the file as a Data URL
-            } else {
-                alert("Please select a valid image file.");
+            function gravityEffect() {
+                var top = parseFloat(charimg.style.top) || 0;
+                var groundLevel = ground.getBoundingClientRect().top;
+
+                // Apply gravity only if the character isn't on the ground
+                if (!isOnGround) {
+                    velocity += gravity;  // Increase velocity by gravity
+                    top += velocity;      // Move the character down by velocity
+                    charimg.style.top = top + 'px';
+                }
+
+                // Check if the character hits the ground
+                var charRect = charimg.getBoundingClientRect();
+                if (charRect.bottom >= groundLevel) {
+                    charimg.style.top = (groundLevel - charRect.height) + 'px';  // Position at the top of the ground
+                    velocity = 0;  // Stop the fall
+                    isOnGround = true;  // Set character as on the ground
+                }
+
+                requestAnimationFrame(gravityEffect);  // Continue applying gravity
             }
+
+            gravityEffect();  // Start gravity effect loop
+        }
+
+        // Function to create an object (yellow box)
+        function createObject() {
+            var newObject = document.createElement('div');
+            newObject.id = 'ob';
+            newObject.style.top = '300px';
+            newObject.style.left = '300px';
+            newObject.style.height = '100px';
+            newObject.style.width = '100px';
+            newObject.style.backgroundColor = 'yellow';
+            newObject.onclick = function() {
+                selectedObject = newObject; // Set the selected object when clicked
+            };
+            document.body.appendChild(newObject);
+            objectCreated = true;
+        }
+
+        // Change the color of the selected object
+        document.getElementById('changeobcolor').onchange = function() {
+            if (selectedObject) {
+                var newColor = document.getElementById('changeobcolor').value;
+                selectedObject.style.backgroundColor = newColor;
+            }
+        };
+
+        // Enable dragging of objects
+        function enableObjectMovement() {
+            document.addEventListener('mousedown', function(e) {
+                if (selectedObject) {
+                    var offsetX = e.clientX - selectedObject.offsetLeft;
+                    var offsetY = e.clientY - selectedObject.offsetTop;
+
+                    function onMouseMove(event) {
+                        selectedObject.style.left = (event.clientX - offsetX) + 'px';
+                        selectedObject.style.top = (event.clientY - offsetY) + 'px';
+                    }
+
+                    document.addEventListener('mousemove', onMouseMove);
+
+                    document.addEventListener('mouseup', function() {
+                        document.removeEventListener('mousemove', onMouseMove);
+                    }, { once: true });
+                }
+            });
+        }
+
+        enableObjectMovement(); // Enable object dragging
+
+        // Check for horizontal collision (only left-right movement)
+        function checkHorizontalCollision(charimg, object) {
+            if (!object) return false;
+
+            var charRect = charimg.getBoundingClientRect();
+            var objectRect = object.getBoundingClientRect();
+
+            // Check collision horizontally
+            return (
+                charRect.right > objectRect.left &&
+                charRect.left < objectRect.right &&
+                charRect.bottom > objectRect.top
+            );
+        }
+
+        // Check for vertical collision (only up-down movement)
+        function checkVerticalCollision(charimg, object) {
+            if (!object) return false;
+
+            var charRect = charimg.getBoundingClientRect();
+            var objectRect = object.getBoundingClientRect();
+
+            // Check collision vertically (falling on top of the object)
+            return (
+                charRect.bottom > objectRect.top &&
+                charRect.top < objectRect.bottom &&
+                charRect.left < objectRect.right &&
+                charRect.right > objectRect.left
+            );
         }
     </script>
 </body>
 </html>
-
-
-
