@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planets in Circular Orbit</title>
     <style>
+        #option {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: black;
+            padding: 10px;
+            position: relative ;
+            right: 0%;
+            left: 75%;
+            
+        }
+        
         #centerElement {
             position: absolute;
             top: 50%;
@@ -22,6 +34,7 @@
             height: 30px;
             background-size: cover;
             border-radius: 50%;
+            transition: transform 0.3s ease;  /* For highlight effect */
         }
 
         #element1 {
@@ -39,6 +52,18 @@
     </style>
 </head>
 <body>
+    <!-- Dropdown for planet selection -->
+    <div id="option">
+        <label for="planets" style="color: white;">Select a Planet:</label>
+        <select name="planets" id="planets">
+            <option value="mercury">Mercury</option>
+            <option value="venus">Venus</option>
+            <option value="earth">Earth</option>
+            <option value="mars">Mars</option>
+        </select>
+    </div>
+
+    <!-- Sun (center element) -->
     <div id="centerElement"></div>
 
     <!-- Planet elements that will orbit around the center -->
@@ -51,7 +76,7 @@
         // Get the center position (x, y) of the central element (Sun)
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
-
+        
         // Function to set an element's position based on its angle and distance from the center
         function setPositionAtDegree(element, degree, centerX, centerY, radius) {
             const radians = degree * (Math.PI / 180);  // Convert degree to radians
@@ -86,6 +111,38 @@
         setPositionAtDegree(document.getElementById('element2'), venusAngle, centerX, centerY, 100);   // Venus, 100px radius
         setPositionAtDegree(document.getElementById('element3'), earthAngle, centerX, centerY, 150);   // Earth, 150px radius
         setPositionAtDegree(document.getElementById('element4'), marsAngle, centerX, centerY, 200);    // Mars, 200px radius
+
+        // Highlight planet based on selection
+        const planetDropdown = document.getElementById('planets');
+        planetDropdown.addEventListener('change', function() {
+            const selectedPlanet = this.value;
+            highlightPlanet(selectedPlanet);
+        });
+
+        function highlightPlanet(planet) {
+            // Reset all planet sizes
+            document.querySelectorAll('.circleElement').forEach(el => {
+                el.style.transform = 'scale(1)';
+            });
+
+            // Highlight selected planet by scaling it
+            const planetElement = document.getElementById(`element${getPlanetIndex(planet)}`);
+            if (planetElement) {
+                planetElement.style.transform = 'scale(1.5)';  // Scale up the selected planet
+            }
+        }
+
+        // Helper function to get planet index by name
+        function getPlanetIndex(planet) {
+            switch(planet) {
+                case 'mercury': return 1;
+                case 'venus': return 2;
+                case 'earth': return 3;
+                case 'mars': return 4;
+                default: return 0;
+            }
+        }
     </script>
 </body>
 </html>
+
