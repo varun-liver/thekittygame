@@ -108,34 +108,7 @@
 
                 // Store the logged-in user's username in localStorage
                 localStorage.setItem('loggedInUser', username);
-
-                // Create the JavaScript content with the username
-                const jsContent = `
-                    var username = '${username}';
-                    console.log('Username:', username);
-
-                    
-                `;
-
-                // Create a Blob with the JavaScript content
-                const blob = new Blob([jsContent], { type: 'text/javascript' });
-
-                // Create a URL for the Blob
-                const url = URL.createObjectURL(blob);
-
-                // Create an invisible anchor element
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'script.js';  // Name the file 'script.js'
-
-                // Append the anchor to the body (necessary for Firefox)
-                document.body.appendChild(a);
-
-                // Programmatically click the anchor to trigger the download
-                a.click();
-
-                // Remove the anchor from the document
-                document.body.removeChild(a);
+                
 
                 // Clear input fields
                 document.getElementById('username').value = '';
@@ -144,6 +117,8 @@
 
                 // Update sign-in info
                 document.getElementById('signin-info').innerText = `Logged in as: ${username}`;
+                window.location = `thekittygame.html/?signedinuser=${username}`;
+
             } else {
                 alert("Login failed. Please check your credentials.");
             }

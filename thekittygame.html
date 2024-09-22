@@ -139,26 +139,49 @@
         <button onclick="dismiss()">Dismiss</button>
     </div>
 
-    <script src="script.js"></script>
+    
 
     <script>
-        // Check if the username variable is defined
-        if (typeof username !== 'undefined') {
-            alert(username);
-        } else {
-            console.warn('username is not defined. Ensure it is set properly in donotopen.js');
-        }
+        // Function to extract query parameters from the URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
 
-        function signin() {
-            window.location.href = "signin.html"; // Redirect to sign-in page
-        }
+// Get 'signedinuser' from the URL
+const signedinuser = getQueryParam('signedinuser');
 
-        function dismiss() {
-            document.getElementById('signin').remove(); // Remove the sign-in prompt
-        }
+// Alert the value of 'signedinuser' if present
+if (signedinuser) {
+    alert(signedinuser);
+} else {
+    console.warn("'signedinuser' is not found in the URL parameters.");
+}
 
-        // WebSocket connection setup (Optional: Example of WebSocket usage)
-        
+// Check if the 'username' variable is defined (in case you use it elsewhere in your script)
+if (typeof username !== 'undefined') {
+    alert(username);
+} else {
+    console.warn('username is not defined. Ensure it is set properly in donotopen.js');
+}
+
+// Function to redirect to the sign-in page
+function signin() {
+    window.location.href = "signin.html"; // Redirect to the sign-in page
+}
+
+// Function to remove the sign-in prompt from the DOM
+function dismiss() {
+    const signinPrompt = document.getElementById('signin');
+    if (signinPrompt) {
+        signinPrompt.remove(); // Remove the sign-in prompt if it exists
+    } else {
+        console.warn('No sign-in element found to remove.');
+    }
+}
+
+// Optional: WebSocket connection setup (Example usage)
+
     </script>
     
     <footer>
