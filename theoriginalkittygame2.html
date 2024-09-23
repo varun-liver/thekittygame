@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player vs Enemy</title>
+    <style>
+        .sprite {
+            width: 100px; /* Set desired width */
+            height: 100px; /* Set desired height */
+            background-size: cover; /* Ensure background image covers the element */
+            position: absolute; /* Allows precise positioning within the container */
+        }
+
+        #player {
+            background-image: url('./pixil-frame-0.png');
+            left: 10px; /* Position player on the left */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Center vertically */
+        }
+        
+        #enemy {
+            background-image: url('./pixil-frame-0.png');
+            right: 10px; /* Position enemy on the right */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Center vertically */
+        }
+
+        #attack-animation {
+            width: 50px; /* Set desired width */
+            height: 50px; /* Set desired height */
+            background-image: url('./pixil-frame-0.png');
+            background-size: cover;
+            position: absolute;
+            /* Start position relative to player */
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: spin 1s linear infinite, move 2s ease-out;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes move {
+            from { left: 10px; }
+            to { left: calc(100% - 120px); } /* Move to the enemy's position */
+        }
+        footer {
+            margin-top: auto; /* Pushes the footer to the bottom */
+            padding: 20px 0;
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="player" class="sprite"></div>
+    <p id="playerHealth">Player Health: 500</p>
+    <div id="enemy" class="sprite"></div>
+    <p id="enemyHealth">Enemy Health: 1000</p>
+    <button id="attack" type="button">Attack</button>
+
+    <script>
+        let playerHealth = 500;
+        let enemyHealth = 1000;
+        const attackButton = document.getElementById('attack');
+        const enemyHealthText = document.getElementById('enemyHealth');
+        const playerHealthText = document.getElementById('playerHealth');
+        let isAttacking = false; // Track if an attack is in progress
+
+        attackButton.addEventListener('click', function() {
+            if (isAttacking) return; // Prevent multiple rapid attacks
+
+            isAttacking = true; // Set attacking state
+
+            // Create the attack animation
+            const attackAnimation = document.createElement('div');
+            attackAnimation.id = 'attack-animation';
+            document.body.appendChild(attackAnimation);
+
+            // Simulate damage calculation
+            const damage = Math.floor(Math.random() * 100) + 1;
+            enemyHealth -= damage;
+            enemyHealthText.textContent = `Enemy Health: ${enemyHealth}`;
+
+            // Remove the attack animation after it finishes
+            setTimeout(() => {
+                attackAnimation.remove();
+                checkTurn();
+            }, 2000); // Matches the duration of the move animation
+        });
+
+        function checkTurn() {
+            if (enemyHealth <= 0) {
+                alert('You win! Redirecting to the home page.');
+                window.location.href = 'index.html'; // Redirect to the home page
+                return;
+            }
+
+            setTimeout(() => {
+                const damage = Math.floor(Math.random() * 100) + 1;
+                playerHealth -= damage;
+                playerHealthText.textContent = `Player Health: ${playerHealth}`;
+
+                if (playerHealth <= 0) {
+                    alert('Game over! Redirecting to the home page.');
+                    window.location.href = "theoriginalkittygame.html"; // Redirect to the home page
+                }
+
+                isAttacking = false; // Allow new attacks
+            }, 1000); // Delay before enemy attacks
+        }
+    </script>
+    <footer >&copy 2024 sus Games</footer>
+</body>
+</html>

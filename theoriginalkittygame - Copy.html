@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Move the Player</title>
+    <style>
+        #player {
+            position: absolute; /* or relative, depending on your layout */
+            top: 0;
+            left: 0;
+            width: 50px; /* Adjust as needed */
+            height: 50px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+    <img id="player" src="c:\Users\sreng\Downloads\pixil-frame-0.png">
+    <p id="output">Press an arrow key to move the image.</p>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            const player = document.getElementById('player');
+            const step = 10; // Number of pixels to move
+
+            // Get the current position
+            let top = parseInt(player.style.top) || 0;
+            let left = parseInt(player.style.left) || 0;
+
+            switch(event.key) {
+                case 'ArrowUp':
+                    player.style.top = (top - step) + 'px';
+                    break;
+                case 'ArrowDown':
+                    player.style.top = (top + step) + 'px';
+                    break;
+                case 'ArrowLeft':
+                    player.style.left = (left - step) + 'px';
+                    break;
+                case 'ArrowRight':
+                    player.style.left = (left + step) + 'px';
+                    break;
+                default:
+                    document.getElementById('output').textContent = 'Press an arrow key!';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Move the Player</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        footer {
+            margin-top: auto; /* Pushes the footer to the bottom */
+            padding: 20px 0;
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+        #player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: auto;
+        }
+        #target-area {
+            position: absolute;
+            top: 150px;
+            left: 190px;
+            width: 100px;
+            height: 100px;
+            opacity: 1;
+            background-image: url('./pixil-frame-0.png');
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <img id="player" src="./pixil-frame-0.png" alt="Player">
+    <div id="target-area"></div> <!-- Target area -->
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            const player = document.getElementById('player');
+            const step = 10; // Number of pixels to move
+            const targetArea = document.getElementById('target-area');
+
+            let top = parseInt(player.style.top) || 0;
+            let left = parseInt(player.style.left) || 0;
+
+            switch(event.key) {
+                case 'ArrowUp':
+                    player.style.top = (top - step) + 'px';
+                    break;
+                case 'ArrowDown':
+                    player.style.top = (top + step) + 'px';
+                    break;
+                case 'ArrowLeft':
+                    player.style.left = (left - step) + 'px';
+                    break;
+                case 'ArrowRight':
+                    player.style.left = (left + step) + 'px';
+                    break;
+                default:
+                    console.log('Press an arrow key!');
+            }
+
+            if (isPlayerInTargetArea(player, targetArea)) {
+                window.location.href = 'theoriginalkittygame2.html';
+            }
+        });
+
+        function isPlayerInTargetArea(player, targetArea) {
+            const playerRect = player.getBoundingClientRect();
+            const targetRect = targetArea.getBoundingClientRect();
+            
+            return (
+                playerRect.left < targetRect.left + targetRect.width &&
+                playerRect.right > targetRect.left &&
+                playerRect.top < targetRect.top + targetRect.height &&
+                playerRect.bottom > targetRect.top
+            );
+        }
+    </script>
+    <footer>&copy; 2024 sus Games</footer>
+</body>
+</html>
+

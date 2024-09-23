@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stick Figure Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        #header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        img {
+            width: 50px; /* Default width for images */
+            height: auto; /* Maintain aspect ratio */
+            margin: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        p {
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Input and buttons -->
+    <input id="hello" type="number" placeholder="Enter a number" />
+    <p id="hello2"></p>
+    <p id="hello3"></p>
+    <p id="hello4"></p>
+    <button type="button" onclick="addStickFigure()">Add Stick Figure</button>
+    <div id="header"></div> <!-- This is where the image will be appended -->
+
+    <script>
+        let a = 0; // Number of images added
+
+        function addStickFigure() {
+            // Get the value from the input field and convert it to a number
+            const inputValue = parseInt(document.getElementById('hello').value, 10);
+            const b = isNaN(inputValue) ? 0 : inputValue; // Handle case where input is not a valid number
+            
+            // Update the input field value and the paragraph text
+            document.getElementById('hello').value = b;
+            document.getElementById('hello2').innerText = a + "/" + b;
+
+            // Check if `a` has reached 1,000,000 before incrementing
+            if (a === 1000000) {
+                document.getElementById('hello3').innerHTML = "ONE MILLION STICK FIGURES!!!!";
+            }
+
+            // Check if `a` has reached the goal
+            if (a === b) {
+                document.getElementById('hello4').innerHTML = "Goal reached";
+            }
+
+            console.log("addStickFigure function called");
+            
+            // Create a new image element
+            const img = document.createElement("img");
+
+            // Set the source and height of the image
+            img.src = "stick.png"; // Ensure this path is correct
+            img.style.height = "417px";
+            img.style.width = "227px" // Set the height of the image
+
+            console.log("Image source set to:", img.src);
+
+            // Find the element with ID 'header'
+            const src = document.getElementById("header");
+            if (src) {
+                src.appendChild(img); // Append image to the header
+                a += 1; // Increment `a` on each button click
+
+                console.log("Image appended to the header");
+            } else {
+                console.log("Element with ID 'header' not found");
+            }
+        }
+    </script>
+    <footer>
+        <p>&copy; 2024 Sus Games</p>
+    </footer>
+</body>
+</html>

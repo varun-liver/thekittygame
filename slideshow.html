@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+            footer {
+                background-color: gray;
+                text-align: center;
+                padding: 10px;
+                margin-top: auto;
+            }
+    </style>
+    <body>
+        <button id="addInput">Add Image Input</button>
+        <br>
+        <img id="img" style="max-width: 200px; cursor: pointer; display: none;">
+        <div id="inputContainer"></div>
+        
+        <script>
+            const addInputButton = document.getElementById('addInput');
+            const img = document.getElementById('img');
+            const inputContainer = document.getElementById('inputContainer');
+
+            let imgSrcs = [];
+            let currentIndex = 0;
+
+            function loadImage(event) {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imgSrcs.push(e.target.result);
+                        currentIndex = imgSrcs.length - 1;
+                        img.src = imgSrcs[currentIndex];
+                        img.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            addInputButton.addEventListener('click', function() {
+                // Create a new file input
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.addEventListener('change', loadImage);
+                
+                // Add the new input to the container
+                inputContainer.appendChild(newInput);
+            });
+
+            img.addEventListener('click', function() {
+                if (imgSrcs.length > 1) {
+                    currentIndex = (currentIndex + 1) % imgSrcs.length;
+                    img.src = imgSrcs[currentIndex];
+                }
+            });
+        </script>
+        <footer>
+            <p> &copy sus games</p>
+        </footer>
+    </body>
+</html>
+
+
+
+
+

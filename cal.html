@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        footer {
+                background-color: gray; /* Gray background */
+                color: white; /* White text */
+                text-align: center; /* Centered text */
+                padding: 10px; /* Some padding for better spacing */
+                position: fixed; /* Stick the footer to the bottom */
+                width: 100%; /* Full width */
+                bottom: 0; /* Position at the bottom */
+            }
+    </style>
+    <body>
+        <!-- Input field for mass -->
+        <input id="mass" type="number" placeholder="Enter mass"></input>
+        <!-- Button to trigger calculation -->
+        <button type="button" id="cal" onclick="calculateLifetime()">Calculate Lifetime</button>
+        <!-- Paragraph to display the result -->
+        <p id="p"></p>
+
+        <script>
+            // Function to calculate the lifetime of the star
+            function calculateLifetime() {
+                // Get the value of mass from the input field
+                var mass = parseFloat(document.getElementById('mass').value);
+
+                // Check if the mass value is valid
+                if (isNaN(mass) || mass <= 0) {
+                    document.getElementById('p').innerHTML = "Please enter a valid mass greater than 0.";
+                    throw dividebyzero
+                    return;
+                }
+
+                // Calculate the star's lifetime using the correct formula
+                var lifetime = (10 ** 10) / (mass ** 2.5);
+
+                // Display the result
+                lifetime = lifetime.toFixed(2)
+                document.getElementById('p').innerHTML = "Estimated Lifetime: " + lifetime  + "years";
+            }
+        </script>
+        <footer>
+            <p>&copy; 2024 Sus Games</p>
+        </footer>
+    </body>
+</html>

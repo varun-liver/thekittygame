@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            /* Footer styles */
+            footer {
+                background-color: gray; /* Gray background */
+                color: white; /* White text */
+                text-align: center; /* Centered text */
+                padding: 10px; /* Some padding for better spacing */
+                position: fixed; /* Stick the footer to the bottom */
+                width: 100%; /* Full width */
+                bottom: 0; /* Position at the bottom */
+            }
+
+            /* Button styles */
+            button {
+                background-color: blue; /* Blue background */
+                color: white; /* White text */
+                border: none; /* No border */
+                padding: 10px 20px; /* Padding */
+                text-align: center; /* Center text */
+                display: inline-block; /* Inline block */
+                font-size: 16px; /* Font size */
+                margin: 4px 2px; /* Margins */
+                cursor: pointer; /* Pointer cursor */
+            }
+
+            /* Centered text for remaining money */
+            #p5 {
+                text-align: center;
+                font-size: 18px;
+            }
+        </style>
+    </head>
+    <body>
+        <button type="button" onclick="add()">Add</button>
+        <div id="container"></div>
+        <button id="finalDoneButton" type="button" onclick="displayCart()">Done</button>
+        <p id="p5"></p>
+
+        <script>
+            let cart = [];
+            let money = 100;
+            document.getElementById('p5').innerHTML = "Remaining Money: $" + money;
+
+            function add() {
+                // Create a container for the new item inputs
+                var itemContainer = document.createElement('div');
+                itemContainer.className = 'item-container';
+                
+                // Create input for price
+                var price = document.createElement('input');
+                price.placeholder = 'Enter price';
+                price.className = 'price';
+                price.type = 'number';  // Ensure price is a number
+                
+                // Create input for name
+                var name = document.createElement('input');
+                name.placeholder = 'Enter name';
+                name.className = 'name';
+                
+                // Create the "Done" button
+                var done = document.createElement('button');
+                done.innerText = 'Done';
+                done.onclick = doneFunction; // Attach the doneFunction to the button
+
+                // Append the elements to the item container
+                itemContainer.appendChild(price);
+                itemContainer.appendChild(name);
+                itemContainer.appendChild(done);
+
+                // Append the item container to the main container
+                var container = document.getElementById('container');
+                container.appendChild(itemContainer);
+            }
+
+            function doneFunction(event) {
+                // Get the parent item container
+                var itemContainer = event.target.parentElement;
+                
+                // Get the values from the input fields
+                var priceValue = parseFloat(itemContainer.querySelector('.price').value);
+                var nameValue = itemContainer.querySelector('.name').value;
+
+                // Check if the price is valid and if there's enough money left
+                if (isNaN(priceValue) || priceValue <= 0) {
+                    alert("Please enter a valid positive price.");
+                    return;
+                }
+
+                if (priceValue > money) {
+                    alert("Insufficient funds. Please enter a lower price.");
+                    return;
+                }
+
+                // Update money
+                money -= priceValue;
+
+                // Update the money display
+                document.getElementById('p5').innerHTML = "Remaining Money: $" + money;
+
+                // Create a new button with the name as its text
+                var newButton = document.createElement('button');
+                newButton.innerText = nameValue;
+                newButton.onclick = function() {
+                    addToCart(nameValue);
+                };
+
+                // Create a new paragraph with the price
+                var priceParagraph = document.createElement('p');
+                priceParagraph.innerHTML = 'Price: $' + priceValue;
+
+                // Append the new elements to the item container
+                itemContainer.appendChild(newButton);
+                itemContainer.appendChild(priceParagraph);
+
+                // Create a "Close" button to hide the input fields and "Done" button inside this item container
+                var close = document.createElement('button');
+                close.innerText = "Close";
+                close.onclick = function() {
+                    closeOnClick(itemContainer);
+                };
+
+                itemContainer.appendChild(close);
+
+                // Hide the input fields and the "Done" button for this item
+                itemContainer.querySelector('.price').style.display = 'none';
+                itemContainer.querySelector('.name').style.display = 'none';
+                event.target.style.display = 'none';
+            }
+
+            function closeOnClick(container) {
+                var elements = container.querySelectorAll('input, button');
+                elements.forEach(function(element) {
+                    element.style.display = 'none';
+                });
+                document.getElementById('close').hidden = true
+            }
+
+            function addToCart(name) {
+                cart.push(name);
+                alert(name + " added to cart");
+            }
+
+            function displayCart() {
+                alert("Cart: " + cart.join(", ") + "\nRemaining Money: $" + money.toFixed(2));
+                document.getElementById('p5').innerHTML = "Remaining Money: $" + money;
+                
+            }
+        </script>
+
+        <footer>
+            <p>&copy; 2024 Sus Games</p>
+        </footer>
+    </body>
+</html>
