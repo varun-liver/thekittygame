@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html, body {
+            height: 100%; /* Make sure the body takes up the full height of the viewport */
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        main {
+            flex: 1; /* Take up remaining space in the flex container */
+            padding: 20px;
+        }
+
+        nav {
+            background-color: gray;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 36px;
+        }
+
+        p {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+            font-size: 18px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .download-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .instruction-image {
+            display: block;
+            margin: 0 auto;
+            width: 200px;
+            height: 100px;
+        }
+
+        .hi1 {
+            font-size: xx-small;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src='pixil-frame-0(1).png' alt="Game Logo" class="logo">
+        <div class="button-container">
+            <a href="thekittygame.html"><button type="button">Home</button></a>
+            <a href="#"><button type="button">Downloads</button></a>
+            <a href="#"><button type="button">About</button></a>
+            <a href="#"><button type="button">Contact</button></a>
+        </div>
+    </nav>
+
+    <main>
+        <h1>The Kitty Game</h1>
+
+        <!-- The download link section -->
+        <div class="download-section">
+            <a href="path/to/image.png" download>
+                Click here to download the image
+            </a>
+        </div>
+
+        <!-- Instructions section -->
+        <h2>How to</h2>
+        <div class="download-section">
+            <img src="Screenshot (34).png" alt="Instruction Image" class="instruction-image">
+            <ul>
+                <li>Click the download link above.</li>
+                <li>Run main window .xaml</li>
+            </ul>
+        </div>
+        <h1>Stick Figure Town</h1>
+        <a href="stickfigure.html" download>
+            Click here to download
+        </a>
+        <h1>Math</h1>
+        <a href="math.html" download>
+            Click here to download
+        </a>
+        <h1>Shop</h1>
+        <a href="shop.html" download>
+            Click here to download
+        </a>
+        <h1>Calculate Lifetime</h1>
+        <a href="cal.html">
+            Click here to download
+        </a>
+        <h1>slideshow</h1>
+            <a href="slideshow.html" download>Click here to download</a>
+        <h1>the original kitty Game</h1>
+            <a href="theoriginalkittygame.html" download>>Click here to download</a>
+        
+    </main>
+
+    <footer>
+        <p class="hi">&copy; 2024 Sus Games. All rights reserved.</p>
+        <p class="hi1">Follow us on 
+            <a href="#">Home</a>, 
+            <a href="#">Downloads</a>, and 
+            <a href="#">Help</a>.
+        </p>
+    </footer>
+</body>
+</html>
+
+
+
