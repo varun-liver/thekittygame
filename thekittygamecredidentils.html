@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        /* Use absolute positioning to move element 25% down the viewport height */
+        #username {
+            position: absolute;
+            top: 30%; /* 25% of the viewport height */
+            left: 0px;
+            transform: translateX(-50%); /* Center horizontally */
+        }
+        #password {
+            position: absolute;
+            top: 25%; /* 25% of the viewport height */
+            left: 0px;
+            transform: translateX(-50%); /* Center horizontally */
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Query Parameters</title>
 </head>
 <body>
-    <h1 id="username"></h1>
-    <h1 id="password"></h1>
+    <h5 id="username"></h5>
+    <hr>
+    <h5 id="password"></h5>
 
     <script>
         // Function to get query parameters from the URL
@@ -17,7 +33,7 @@
         }
 
         // Retrieve 'username' and 'password' from URL query parameters
-        const signedinuser = getQueryParam('signedinuser'); // Changed to 'signedinuser' based on the previous code
+        const signedinuser = getQueryParam('signedinuser');
         const password1 = getQueryParam('password');
 
         // Get the DOM elements for username and password
@@ -30,3 +46,4 @@
     </script>
 </body>
 </html>
+
