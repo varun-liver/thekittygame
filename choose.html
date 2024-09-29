@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Choices Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>50 Random Choices</h1>
+    
+    <p id="p1"></p>
+    <p id="p2"></p>
+
+    <script>
+        // Function to generate a random number between 0 and 50
+        function getRandomNumber() {
+            return Math.floor(Math.random() * 51); // 0 to 50
+        }
+
+        // Display two random numbers
+        document.getElementById('p1').innerHTML = "random " + getRandomNumber();
+        document.getElementById('p2').innerHTML = "random " + getRandomNumber();
+    </script>
+
+</body>
+</html>
+
+
+

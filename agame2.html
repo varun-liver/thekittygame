@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @keyframes up {
+            0% {top: 0px;}  
+            100% {top: 675px;} 
+        }
+        .p {
+            position: relative;
+            animation: up 20s infinite;
+        }
+        #sus {
+            position: absolute; /* Absolute position to move the element freely */
+            left: 0px; /* Starting point */
+        }
+    </style>
+</head>
+<body>
+    <p class="p">hi</p>
+    <p id="sus">sus</p>
+    <script>
+        let susPosition = 0; // Initialize position
+        document.addEventListener('keydown', (event) => {
+            if (event.key === "a") {
+                susPosition += 10; // Move by 10px on each "a" key press
+                document.getElementById('sus').style.left = susPosition + 'px'; // Update the position
+            }
+            if (event.key === "s") {
+                susPosition += 10; // Move by 10px on each "a" key press
+                document.getElementById('sus').style.right = susPosition + 'px'; // Update the position
+            }
+        });
+    </script>
+</body>
+</html>
+
