@@ -14,23 +14,33 @@
 <body>
 
     <h1>50 Random Choices</h1>
+    <!-- Button to generate random choices -->
+    <button onclick="generateChoices()">Generate Choices</button>
     
     <p id="p1"></p>
     <p id="p2"></p>
 
     <script>
-        // Function to generate a random number between 0 and 50
-        function getRandomNumber() {
-            return Math.floor(Math.random() * 51); // 0 to 50
+        // Function to generate a random integer between 0 and 50
+        function getRandomInteger() {
+            return Math.floor(Math.random() * 51);  // Returns a random integer from 0 to 50
         }
 
-        // Display two random numbers
-        document.getElementById('p1').innerHTML = "random " + getRandomNumber();
-        document.getElementById('p2').innerHTML = "random " + getRandomNumber();
+        // Function to display random integers in the paragraphs
+        function generateChoices() {
+            document.getElementById('p1').innerHTML = "random " + getRandomInteger();
+            document.getElementById('p2').innerHTML = "random " + getRandomInteger();
+        }
+
+        // Optionally, you can generate choices on page load as well
+        window.onload = generateChoices();
     </script>
 
 </body>
 </html>
+
+
+
 
 
 
