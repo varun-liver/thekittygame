@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw Rectangle</title>
+    <style>
+        body{
+            background-image: url('bluescreanofdeath.jpg');
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+
+    <script>
+        var selectedx;
+        var selectedy;
+        var selected2x;
+        var selected2y;
+
+        // Get the canvas and context
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Listen for mousedown to get the start point
+        document.addEventListener('mousedown', function(event) {
+            selectedx = event.clientX - canvas.offsetLeft;
+            selectedy = event.clientY - canvas.offsetTop;
+            console.log("Mouse Down: X =", selectedx, ", Y =", selectedy);
+        });
+
+        // Listen for mouseup to get the endpoint and draw the rectangle
+        document.addEventListener('mouseup', function(event) {
+            selected2x = event.clientX - canvas.offsetLeft;
+            selected2y = event.clientY - canvas.offsetTop;
+            console.log("Mouse Up: X =", selected2x, ", Y =", selected2y);
+
+            // Calculate width and height of the rectangle
+            var width = selected2x - selectedx;
+            var height = selected2y - selectedy;
+
+            // Draw the rectangle
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear previous drawings
+            ctx.strokeStyle = "#2419b5";  // Set the rectangle border color
+            ctx.fillStyle = "#827dc9";  // Set the fill color
+
+            ctx.fillRect(selectedx, selectedy, width, height);  // Fill the rectangle
+            ctx.strokeRect(selectedx, selectedy, width, height);  // Draw the border
+        });
+    </script>
+</body>
+</html>
+
