@@ -26,7 +26,7 @@
         .logo {
             height: 60px;
             width: auto;
-            cursor: pointer; /* Cursor changes on hover for interactivity */
+            cursor: pointer;
         }
         .button-container {
             display: flex;
@@ -104,18 +104,18 @@
             width: 100px;
             position: absolute;
             top: 70px;
-            right: 100%; /* Initially hidden off-screen */
+            right: 100%;
         }
         
         .slidein {
-            animation: slidein 0.5s forwards; /* Trigger the slide-in animation */
+            animation: slidein 0.5s forwards;
         }
         @keyframes slidein {
             from {
-                left: -200px; /* Start off-screen */
+                left: -200px;
             }
             to {
-                left: 0px; /* Slide into view */
+                left: 0px;
             }
         }
     </style>
@@ -128,11 +128,10 @@
         </div>
         <div class="button-container">
             <a href="thekittygame.html"><button type="button">Home</button></a>
-            <a href="thekittygamedownloads.html"><button type="button">Downloads</button></a> <!-- Removed type="button" -->
+            <a href="thekittygamedownloads.html" id="downloadsLink"><button type="button">Downloads</button></a>
             <a href="#"><button type="button">About</button></a>
             <a href="#"><button type="button">Contact</button></a>
         </div>
-        
     </nav>
 
     <h1>The Kitty Game</h1>
@@ -176,25 +175,32 @@
 
     <script>
         function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
-// Fetch the username from the URL parameters
-var username = getQueryParam('username');
+        // Fetch the username and password from URL parameters
+        var username = getQueryParam('username');
 
-// Display the username inside the options div
-var options = document.getElementById('options');
-var logo = document.getElementById('logo');
+        // Append query parameters to the Downloads link
+        if (username) {
+            var downloadsLink = document.getElementById('downloadsLink');
+            downloadsLink.href += `?username=${username}`;
+        }
 
-logo.addEventListener('mousedown', function () {
-    options.classList.add('slidein'); // Trigger the slide-in animation
-    if (username) {
-        document.getElementById('username').innerText = username; // Set the username text
-    } else {
-        document.getElementById('username').innerText = 'Guest'; // Fallback for no username
-    }
-});
+        // Display the username in the options div
+        var options = document.getElementById('options');
+        var logo = document.getElementById('logo');
+
+        logo.addEventListener('mousedown', function () {
+            options.classList.add('slidein'); // Trigger the slide-in animation
+            if (username) {
+                document.getElementById('username').innerText = username; // Display the username
+            } else {
+                document.getElementById('username').innerText = 'Guest'; // Fallback for no username
+            }
+        });
+
         // Function to redirect to the sign-in page
         function signin() {
             window.location.href = "thekittygamesignin.html"; // Redirect to the sign-in page
@@ -209,9 +215,6 @@ logo.addEventListener('mousedown', function () {
                 console.warn('No sign-in element found to remove.');
             }
         }
-
-        // Event listener to trigger the slide-in animation
-        
     </script>
 </body>
 </html>
