@@ -9,7 +9,7 @@
             0% {top: 0px;}  
             100% {top: 675px;} 
         }
-        .p {
+        #p {
             position: relative;
             animation: up 20s infinite;
         }
@@ -20,21 +20,35 @@
     </style>
 </head>
 <body>
-    <p class="p">hi</p>
+    <p id="p">hi</p>
     <p id="sus">sus</p>
     <script>
         let susPosition = 0; // Initialize position
+
         document.addEventListener('keydown', (event) => {
             if (event.key === "a") {
                 susPosition += 10; // Move by 10px on each "a" key press
                 document.getElementById('sus').style.left = susPosition + 'px'; // Update the position
             }
             if (event.key === "s") {
-                susPosition += 10; // Move by 10px on each "a" key press
-                document.getElementById('sus').style.right = susPosition + 'px'; // Update the position
+                susPosition -= 10; // Move by 10px on each "s" key press
+                document.getElementById('sus').style.left = susPosition + 'px'; // Update the position
+            }
+
+            // Check for collision
+            const pRect = document.getElementById('p').getBoundingClientRect();
+            const susRect = document.getElementById('sus').getBoundingClientRect();
+
+            // Collision detection
+            if (pRect.left < susRect.right &&
+                pRect.right > susRect.left &&
+                pRect.top < susRect.bottom &&
+                pRect.bottom > susRect.top) {
+                alert('sus');
             }
         });
     </script>
 </body>
 </html>
+
 

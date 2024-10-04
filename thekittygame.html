@@ -26,6 +26,7 @@
         .logo {
             height: 60px;
             width: auto;
+            cursor: pointer; /* Cursor changes on hover for interactivity */
         }
         .button-container {
             display: flex;
@@ -96,17 +97,42 @@
         #signin button {
             margin: 5px;
         }
+        #options {
+            background-color: black;
+            color: white;
+            padding: 5px;
+            width: 100px;
+            position: absolute;
+            top: 70px;
+            right: 100%; /* Initially hidden off-screen */
+        }
+        
+        .slidein {
+            animation: slidein 0.5s forwards; /* Trigger the slide-in animation */
+        }
+        @keyframes slidein {
+            from {
+                left: -200px; /* Start off-screen */
+            }
+            to {
+                left: 0px; /* Slide into view */
+            }
+        }
     </style>
 </head>
 <body>
     <nav>
-        <img src='pixil-frame-0(1).png' alt="Game Logo" class="logo">
+        <img src='sus.png' alt="Game Logo" class="logo" id="logo">
+        <div id="options">
+            <p id="username">null</p>
+        </div>
         <div class="button-container">
             <a href="thekittygame.html"><button type="button">Home</button></a>
-            <a href="thekittygamedownloads.html"><button type="button">Downloads</button></a>
+            <a href="thekittygamedownloads.html"><button type="button">Downloads</button></a> <!-- Removed type="button" -->
             <a href="#"><button type="button">About</button></a>
             <a href="#"><button type="button">Contact</button></a>
         </div>
+        
     </nav>
 
     <h1>The Kitty Game</h1>
@@ -139,31 +165,6 @@
         <button onclick="dismiss()">Dismiss</button>
     </div>
 
-    
-
-    <script>
-        // Function to extract query parameters from the URL
-
-
-// Function to redirect to the sign-in page
-function signin() {
-    window.location.href = "thekittygame/thekittygamesignin.html"; // Redirect to the sign-in page
-}
-
-// Function to remove the sign-in prompt from the DOM
-function dismiss() {
-    const signinPrompt = document.getElementById('signin');
-    if (signinPrompt) {
-        signinPrompt.remove(); // Remove the sign-in prompt if it exists
-    } else {
-        console.warn('No sign-in element found to remove.');
-    }
-}
-
-// Optional: WebSocket connection setup (Example usage)
-
-    </script>
-    
     <footer>
         <p class="hi">&copy; 2024 Sus Games. All rights reserved.</p>
         <p class="hi1">Follow us on 
@@ -172,6 +173,45 @@ function dismiss() {
             <a href="#">Help</a>.
         </p>
     </footer>
+
+    <script>
+        function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Fetch the username from the URL parameters
+var username = getQueryParam('username');
+
+// Display the username inside the options div
+var options = document.getElementById('options');
+var logo = document.getElementById('logo');
+
+logo.addEventListener('mousedown', function () {
+    options.classList.add('slidein'); // Trigger the slide-in animation
+    if (username) {
+        document.getElementById('username').innerText = username; // Set the username text
+    } else {
+        document.getElementById('username').innerText = 'Guest'; // Fallback for no username
+    }
+});
+        // Function to redirect to the sign-in page
+        function signin() {
+            window.location.href = "thekittygamesignin.html"; // Redirect to the sign-in page
+        }
+
+        // Function to remove the sign-in prompt from the DOM
+        function dismiss() {
+            const signinPrompt = document.getElementById('signin');
+            if (signinPrompt) {
+                signinPrompt.remove(); // Remove the sign-in prompt if it exists
+            } else {
+                console.warn('No sign-in element found to remove.');
+            }
+        }
+
+        // Event listener to trigger the slide-in animation
+        
+    </script>
 </body>
 </html>
-

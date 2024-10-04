@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kitty Game - Sign In</title>
     <style>
         body {
             margin: 0;
@@ -22,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
-        #signin, #createnew {
+        #signin, #createnew, #update-password-section {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -59,10 +62,15 @@
             margin-top: 10px;
             font-size: 16px;
         }
+
+        #update-password-section {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div id="container">
+        <!-- Login Section -->
         <div id="signin">
             <h1>Login</h1>
             <input id="username" placeholder="Username">
@@ -72,6 +80,7 @@
             <p id="signin-info"></p>
         </div>
 
+        <!-- Create New User Section -->
         <div id="createnew">
             <h1>Create New User</h1>
             <input id="cusername" placeholder="Username">
@@ -81,93 +90,133 @@
         </div>
     </div>
 
+    <!-- Password Update Section -->
+    <div id="update-password-section">
+        <h1>Update Password</h1>
+        <input id="old-password" type="password" placeholder="Old Password">
+        <input id="new-password" type="password" placeholder="New Password">
+        <input id="confirm-new-password" type="password" placeholder="Confirm New Password">
+        <button onclick="updatePassword()">Update Password</button>
+    </div>
+
     <script>
-        var changedpass = getQueryParam('password')
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-        ussr[name][1] = changedpass
-        // Initialize default data if 'ussr' is not present in localStorage
-        if (!localStorage.getItem('ussr')) {
-            let defaultData = {
-                "john": ["user1", "pass1"] // Example user: name is 'john', username is 'user1', password is 'pass1'
-            };
-            localStorage.setItem('ussr', JSON.stringify(defaultData));
-        }
+        // Ensure the script runs only after DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve existing users from localStorage or initialize with default data
+            let storedUssr = localStorage.getItem('ussr');
+            let ussr = storedUssr ? JSON.parse(storedUssr) : {};
 
-        // Retrieve and parse the 'ussr' object from localStorage
-        let newussr = localStorage.getItem('ussr');
-        let ussr = newussr ? JSON.parse(newussr) : {}; // Parse or default to empty object
+            // Initialize default user if none exists
+            if (Object.keys(ussr).length === 0) {
+                ussr = {
+                    "john": ["user1", "pass1"]
+                };
+                localStorage.setItem('ussr', JSON.stringify(ussr));
+            }
 
-        function get(id) {
-            return document.getElementById(id).value.trim();
-        }
+            // Helper function to get input values by ID
+            function get(id) {
+                return document.getElementById(id).value.trim();
+            }
 
-        function done() {
-            var username = get("username");
-            var password = get("password");
-            var name = get("name");
+            function done() {
+    var username = get("username").toLowerCase();
+    var password = get("password");
+    var name = get("name");
 
-            if (ussr[name] && username === ussr[name][0] && password === ussr[name][1]) {
-                alert("Login successful");
+    if (ussr[name] && username === ussr[name][0].toLowerCase() && password === ussr[name][1]) {
+        alert("Login successful");
 
-                // Store the logged-in user's username in localStorage
-                localStorage.setItem('loggedInUser', username);
-                
+        // Store the logged-in user's username in localStorage
+        localStorage.setItem('loggedInUser', username);
+
+        // Clear input fields
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('name').value = '';
+
+        // Update sign-in info
+        document.getElementById('signin-info').innerText = `Logged in as: ${username}`;
+
+        // Redirect to another website
+        window.location.href = `thekittygame.html/?username=${username}&password=${password}`;
+    } else {
+        alert("Login failed. Please check your credentials.");
+    }
+}
+
+
+            // Create new user function
+            function create() {
+                var cuser = get('cusername');
+                var cpass = get('cpassword');
+                var cname = get('cname');
+
+                if (!cuser || !cpass || !cname) {
+                    alert("Please fill out all fields.");
+                    return;
+                }
+
+                // Check if the username is already taken
+                if (Object.values(ussr).some(user => user[0] === cuser)) {
+                    alert("Username is already taken. Please choose another one.");
+                    return;
+                }
+
+                // Add new user to the ussr object
+                ussr[cname] = [cuser, cpass];
+
+                // Save the updated ussr object back to localStorage
+                localStorage.setItem('ussr', JSON.stringify(ussr));
+
+                alert("User created successfully!");
 
                 // Clear input fields
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
-                document.getElementById('name').value = '';
-
-                // Update sign-in info
-                document.getElementById('signin-info').innerText = `Logged in as: ${username}`;
-                window.location = `thekittygamecredidentils.html/?signedinuser=${username}&password=${password}`;
-
-
-            } else {
-                alert("Login failed. Please check your credentials.");
-            }
-        }
-
-        function create() {
-            var cuser = get('cusername');
-            var cpass = get('cpassword');
-            var cname = get('cname');
-
-            if (!cuser || !cpass || !cname) {
-                alert("Please fill out all fields.");
-                return;
+                document.getElementById('cusername').value = '';
+                document.getElementById('cpassword').value = '';
+                document.getElementById('cname').value = '';
             }
 
-            // Check if the username is already taken
-            if (Object.values(ussr).some(user => user[0] === cuser)) {
-                alert("Username is already taken. Please choose another one.");
-                return;
+            // Update password function
+            function updatePassword() {
+                var loggedInUser = localStorage.getItem('loggedInUser');
+                var oldPassword = get("old-password");
+                var newPassword = get("new-password");
+                var confirmNewPassword = get("confirm-new-password");
+
+                for (var name in ussr) {
+                    if (ussr[name][0] === loggedInUser) {
+                        if (oldPassword !== ussr[name][1]) {
+                            alert("Old password is incorrect.");
+                            return;
+                        }
+
+                        if (newPassword !== confirmNewPassword) {
+                            alert("New password and confirmation do not match.");
+                            return;
+                        }
+
+                        // Update password in ussr object
+                        ussr[name][1] = newPassword;
+                        localStorage.setItem('ussr', JSON.stringify(ussr));
+
+                        alert("Password updated successfully!");
+
+                        // Clear input fields
+                        document.getElementById('old-password').value = '';
+                        document.getElementById('new-password').value = '';
+                        document.getElementById('confirm-new-password').value = '';
+                    }
+                }
             }
 
-            // Add new user to the ussr object
-            ussr[cname] = [cuser, cpass];
-
-            // Save the updated ussr object back to localStorage
-            localStorage.setItem('ussr', JSON.stringify(ussr));
-
-            alert("User created successfully!");
-
-            // Clear input fields
-            document.getElementById('cusername').value = '';
-            document.getElementById('cpassword').value = '';
-            document.getElementById('cname').value = '';
-        }
-
-        // Check localStorage for loggedInUser and update sign-in info
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            document.getElementById('signin-info').innerText = `Logged in as: ${loggedInUser}`;
-        } else {
-            document.getElementById('signin-info').innerText = "You are not logged in.";
-        }
+            // Expose functions globally
+            window.done = done;
+            window.create = create;
+            window.updatePassword = updatePassword;
+        });
     </script>
 </body>
 </html>
+
+
