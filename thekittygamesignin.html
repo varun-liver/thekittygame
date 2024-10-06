@@ -25,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
-        #signin, #createnew, #update-password-section {
+        #signin, #createnew {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -57,15 +57,6 @@
         h1 {
             margin-bottom: 10px;
         }
-
-        #signin-info {
-            margin-top: 10px;
-            font-size: 16px;
-        }
-
-        #update-password-section {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -90,15 +81,6 @@
         </div>
     </div>
 
-    <!-- Password Update Section -->
-    <div id="update-password-section">
-        <h1>Update Password</h1>
-        <input id="old-password" type="password" placeholder="Old Password">
-        <input id="new-password" type="password" placeholder="New Password">
-        <input id="confirm-new-password" type="password" placeholder="Confirm New Password">
-        <button onclick="updatePassword()">Update Password</button>
-    </div>
-
     <script>
         // Ensure the script runs only after DOM is fully loaded
         document.addEventListener("DOMContentLoaded", function() {
@@ -119,35 +101,27 @@
                 return document.getElementById(id).value.trim();
             }
 
-            function done() {
-    var username = get("username").toLowerCase();
-    var password = get("password");
-    var name = get("name");
+            // Login function
+            window.done = function() {
+                var username = get("username").toLowerCase();
+                var password = get("password");
+                var name = get("name");
 
-    if (ussr[name] && username === ussr[name][0].toLowerCase() && password === ussr[name][1]) {
-        alert("Login successful");
-
-        // Store the logged-in user's username in localStorage
-        localStorage.setItem('loggedInUser', username);
-
-        // Clear input fields
-        document.getElementById('username').value = '';
-        document.getElementById('password').value = '';
-        document.getElementById('name').value = '';
-
-        // Update sign-in info
-        document.getElementById('signin-info').innerText = `Logged in as: ${username}`;
-
-        // Redirect to another website
-        window.location.href = `thekittygame.html/?username=${username}&password=${password}`;
-    } else {
-        alert("Login failed. Please check your credentials.");
-    }
-}
-
+                if (ussr[name] && username === ussr[name][0].toLowerCase() && password === ussr[name][1]) {
+                    alert("Login successful");
+                    localStorage.setItem('loggedInUser', username);
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('name').value = '';
+                    document.getElementById('signin-info').innerText = `Logged in as: ${username}`;
+                    window.location.href = `thekittygame.html?username=${username}&password=${password}`;
+                } else {
+                    alert("Login failed. Please check your credentials.");
+                }
+            };
 
             // Create new user function
-            function create() {
+            window.create = function() {
                 var cuser = get('cusername');
                 var cpass = get('cpassword');
                 var cname = get('cname');
@@ -165,8 +139,6 @@
 
                 // Add new user to the ussr object
                 ussr[cname] = [cuser, cpass];
-
-                // Save the updated ussr object back to localStorage
                 localStorage.setItem('ussr', JSON.stringify(ussr));
 
                 alert("User created successfully!");
@@ -175,48 +147,8 @@
                 document.getElementById('cusername').value = '';
                 document.getElementById('cpassword').value = '';
                 document.getElementById('cname').value = '';
-            }
-
-            // Update password function
-            function updatePassword() {
-                var loggedInUser = localStorage.getItem('loggedInUser');
-                var oldPassword = get("old-password");
-                var newPassword = get("new-password");
-                var confirmNewPassword = get("confirm-new-password");
-
-                for (var name in ussr) {
-                    if (ussr[name][0] === loggedInUser) {
-                        if (oldPassword !== ussr[name][1]) {
-                            alert("Old password is incorrect.");
-                            return;
-                        }
-
-                        if (newPassword !== confirmNewPassword) {
-                            alert("New password and confirmation do not match.");
-                            return;
-                        }
-
-                        // Update password in ussr object
-                        ussr[name][1] = newPassword;
-                        localStorage.setItem('ussr', JSON.stringify(ussr));
-
-                        alert("Password updated successfully!");
-
-                        // Clear input fields
-                        document.getElementById('old-password').value = '';
-                        document.getElementById('new-password').value = '';
-                        document.getElementById('confirm-new-password').value = '';
-                    }
-                }
-            }
-
-            // Expose functions globally
-            window.done = done;
-            window.create = create;
-            window.updatePassword = updatePassword;
+            };
         });
     </script>
 </body>
 </html>
-
-

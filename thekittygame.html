@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Kitty Game</title>
     <style>
-        .hi1 {
-            font-size: xx-small;
-            position: relative;
-        }
         body {
             font-family: sans-serif;
             margin: 0;
@@ -100,19 +96,58 @@
         #options {
             background-color: black;
             color: white;
-            padding: 5px;
-            width: 100px;
+            padding: 10px;
+            width: 200px;
             position: absolute;
             top: 70px;
-            right: 100%;
+            left: 0;
+            z-index: 10;
+            visibility: hidden;
+            border-radius: 5px;
+            transition: visibility 0.5s ease-in-out;
         }
-        
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            color: black;
+            min-width: 100%;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         .slidein {
             animation: slidein 0.5s forwards;
+            visibility: visible;
         }
+
         @keyframes slidein {
             from {
-                left: -200px;
+                left: -250px;
             }
             to {
                 left: 0px;
@@ -124,11 +159,19 @@
     <nav>
         <img src='sus.png' alt="Game Logo" class="logo" id="logo">
         <div id="options">
-            <p id="username">null</p>
+            <h6 id="username">null</h6>
+
+            <!-- Custom Dropdown inside options div -->
+            <div class="dropdown">
+                <button>Settings</button>
+                <div class="dropdown-content">
+                    <a href="thekittygamesignin.html" id="Profile">Profile</a>
+                </div>
+            </div>
         </div>
         <div class="button-container">
             <a href="thekittygame.html"><button type="button">Home</button></a>
-            <a href="thekittygamedownloads.html" id="downloadsLink"><button type="button">Downloads</button></a>
+            <a id="downloadsLink" href="thekittygamedownloads.html"><button type="button">Downloads</button></a>
             <a href="#"><button type="button">About</button></a>
             <a href="#"><button type="button">Contact</button></a>
         </div>
@@ -174,45 +217,47 @@
     </footer>
 
     <script>
+        var profile = document.getElementById('Profile');
+        var password = getQueryParam('password');
+        
+        profile.addEventListener('mousedown', function(){
+            if (username) {
+                window.location.href = `thekittygamecredidentils.html?username=${username}&password=${password}`;
+            }
+            else{
+                window.location.href = `thekittygamesignin.html`
+            }
+        });
+
+        window.onload = function(){
+            if (username) {
+                signinPrompt.remove();
+            }
+        };
+
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // Fetch the username and password from URL parameters
         var username = getQueryParam('username');
-
-        // Append query parameters to the Downloads link
-        if (username) {
-            var downloadsLink = document.getElementById('downloadsLink');
-            downloadsLink.href += `?username=${username}`;
-        }
-
-        // Display the username in the options div
         var options = document.getElementById('options');
         var logo = document.getElementById('logo');
+        var signinPrompt = document.getElementById('signin');
 
         logo.addEventListener('mousedown', function () {
-            options.classList.add('slidein'); // Trigger the slide-in animation
-            if (username) {
-                document.getElementById('username').innerText = username; // Display the username
-            } else {
-                document.getElementById('username').innerText = 'Guest'; // Fallback for no username
-            }
+            options.classList.add('slidein');
+            options.style.visibility = 'visible';
+            document.getElementById('username').innerText = username || 'Guest';
         });
 
-        // Function to redirect to the sign-in page
         function signin() {
-            window.location.href = "thekittygamesignin.html"; // Redirect to the sign-in page
+            window.location.href = "thekittygamesignin.html";
         }
 
-        // Function to remove the sign-in prompt from the DOM
         function dismiss() {
-            const signinPrompt = document.getElementById('signin');
             if (signinPrompt) {
-                signinPrompt.remove(); // Remove the sign-in prompt if it exists
-            } else {
-                console.warn('No sign-in element found to remove.');
+                signinPrompt.remove();
             }
         }
     </script>
