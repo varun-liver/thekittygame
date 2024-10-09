@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission Select</title>
-    
-    <!-- Inline CSS to hide the body until fully loaded -->
+
+    <!-- Hide content initially to avoid FOUC -->
     <style>
         body {
-            visibility: hidden; /* Hide the body initially */
+            visibility: hidden;
         }
-        /* Initially hide the mission log using CSS */
+
+        /* Initially hide the mission log */
         #missionlog {
             display: none;
         }
@@ -21,35 +22,42 @@
         <h1>Select Mission</h1>
         <button onclick="mission1select()">Mission 1</button>
         <div id="missionlog">
-            <p>Mission 1 Selected!</p> <!-- This will be shown when the button is clicked -->
+            <p>Mission 1 Selected!</p>
         </div>
     </div>
 
-    <!-- jQuery for convenience -->
+    <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <!-- JavaScript to reveal the body when the page has fully loaded -->
+    <!-- JavaScript to handle body visibility and interaction -->
     <script>
+        // Ensure body is shown after the page is fully loaded
         window.onload = function() {
-            document.body.style.visibility = 'visible'; // Make the body visible after loading
+            document.body.style.visibility = 'visible';
         };
 
-        var missionselect = document.getElementById('missionselect');
-
+        // Function to handle mission selection
         function mission1select() {
-            clear(missionselect);
+            // Clear mission selection buttons
+            clear(document.getElementById('missionselect'));
+
+            // Create a new button to show mission log
             var missionlogButton = document.createElement('button');
             missionlogButton.innerText = "Show Mission Log";
+
+            // On clicking the button, display the hidden mission log
             missionlogButton.onclick = function() {
-                $('#missionlog').show(); // Show the mission log using jQuery
+                $('#missionlog').css('display', 'block'); // Use jQuery to show the log
             };
-            missionselect.appendChild(missionlogButton);
+
+            // Append the new button to the missionselect div
+            document.getElementById('missionselect').appendChild(missionlogButton);
         }
 
-        function clear(object) {
-            object.innerHTML = ""; // Clear the content of the div
+        // Function to clear the content of an element
+        function clear(element) {
+            element.innerHTML = "";
         }
     </script>
 </body>
 </html>
-
