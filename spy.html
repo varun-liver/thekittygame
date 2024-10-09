@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Select</title>
+</head>
+<body>
+    <div id="missionselect">
+        <h1>Select Mission</h1>
+        <button onclick="mission1select()">Mission 1</button>
+        <div hidden="true" id="missionlog">
+            <p>Mission 1 Selected!</p>
+        </div>
+    </div>
+
+    <script>
+        var missionselect = document.getElementById('missionselect');
+
+        function mission1select() {
+            clear(missionselect);
+            var missionlogButton = document.createElement('button');
+            missionlogButton.innerText = "Show Mission Log";
+            missionlogButton.onclick = function() {
+                document.getElementById('missionlog').hidden = false;
+            };
+            missionselect.appendChild(missionlogButton);
+        }
+
+        function clear(object) {
+            object.innerHTML = ""; // Fixed the typo here
+        }
+    </script>
+</body>
+</html>
