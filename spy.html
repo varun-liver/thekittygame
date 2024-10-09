@@ -4,17 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission Select</title>
+    
+    <!-- Inline CSS to hide the body until fully loaded -->
+    <style>
+        body {
+            visibility: hidden; /* Hide the body initially */
+        }
+        /* Initially hide the mission log using CSS */
+        #missionlog {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div id="missionselect">
         <h1>Select Mission</h1>
         <button onclick="mission1select()">Mission 1</button>
-        <div hidden="true" id="missionlog">
-            <p>Mission 1 Selected!</p>
+        <div id="missionlog">
+            <p>Mission 1 Selected!</p> <!-- This will be shown when the button is clicked -->
         </div>
     </div>
 
+    <!-- jQuery for convenience -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- JavaScript to reveal the body when the page has fully loaded -->
     <script>
+        window.onload = function() {
+            document.body.style.visibility = 'visible'; // Make the body visible after loading
+        };
+
         var missionselect = document.getElementById('missionselect');
 
         function mission1select() {
@@ -22,14 +41,15 @@
             var missionlogButton = document.createElement('button');
             missionlogButton.innerText = "Show Mission Log";
             missionlogButton.onclick = function() {
-                document.getElementById('missionlog').hidden = false;
+                $('#missionlog').show(); // Show the mission log using jQuery
             };
             missionselect.appendChild(missionlogButton);
         }
 
         function clear(object) {
-            object.innerHTML = ""; // Fixed the typo here
+            object.innerHTML = ""; // Clear the content of the div
         }
     </script>
 </body>
 </html>
+
